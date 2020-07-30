@@ -12,6 +12,8 @@ const {
 
 const api = new express.Router();
 
+// Express doesn't have build in async-error handling, so this utility
+// wraps all async http endpoind functions.
 function trapAsyncErrors(handler) {
   return async (req, res, next) => {
     try {
@@ -21,7 +23,9 @@ function trapAsyncErrors(handler) {
     }
   };
 }
-
+/**
+ * Loads and sends a list of all projects currently on disk.
+ */
 api.get(
   "/projects",
   trapAsyncErrors(async (req, res, next) => {
@@ -29,6 +33,10 @@ api.get(
   })
 );
 
+/**
+ * PUTS a single project onto disk. Emits 422 with errors if data is not valid.
+ * This will replace the porject entirely, not merge.
+ */
 api.put(
   "/projects/:id",
   trapAsyncErrors(async (req, res, next) => {
@@ -44,6 +52,9 @@ api.put(
   })
 );
 
+/**
+ * Loads and sends a single project object, or 404 if no object is on disk.
+ */
 api.get(
   "/projects/:id",
   trapAsyncErrors(async (req, res, next) => {
@@ -56,6 +67,9 @@ api.get(
   })
 );
 
+/**
+ * Deletes a single project from disk.
+ */
 api.delete(
   "/projects/:id",
   trapAsyncErrors(async (req, res, next) => {
@@ -64,6 +78,9 @@ api.delete(
   })
 );
 
+/**
+ * Load site data from disk.
+ */
 api.get(
   "/site",
   trapAsyncErrors(async (req, res, next) => {
@@ -72,6 +89,9 @@ api.get(
   })
 );
 
+/**
+ * Update site data (this will completely overwrite data, not merge).
+ */
 api.put(
   "/site",
   trapAsyncErrors(async (req, res, next) => {
