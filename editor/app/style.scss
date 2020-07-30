@@ -1,0 +1,66 @@
+body,
+html {
+  margin: 0;
+  font-family: Helvetical Neue, Helvetica;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+header {
+  background: #fcc;
+  margin-bottom: 2 rem;
+
+  a {
+    margin: 0.5rem;
+    padding: 0.5rem;
+  }
+}
+form {
+  display: grid;
+  grid-template-columns: 10rem 40rem;
+  grid-row-gap: 1rem;
+
+  .errors {
+    grid-column-start: 2;
+    grid-column-end: -1;
+    color: white;
+    margin: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    background: red;
+  }
+
+  label {
+    text-align: right;
+    margin-right: 1rem;
+  }
+
+  button {
+    justify-self: start;
+    grid-column-start: 2;
+  }
+}
+
+.project-list {
+  margin: 0;
+  padding: 0;
+}
+
+.project-list-item {
+  display: grid;
+  grid-template-columns: 1fr 10rem;
+  padding: 0 1rem;
+
+  .project-actions {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  > * {
+    align-self: center;
+  }
+
+  &:nth-child(odd) {
+    background-color: #eaeaea;
+  }
+}
