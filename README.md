@@ -1,3 +1,6 @@
+## Here are the instructions for this programming assessment task.
+## https://share.nuclino.com/p/Full-stack-Code-Review-Update-B9QiHxoI0SEwarke4bg_w1
+
 # My Simple Portfolio
 
 (work in progress)
