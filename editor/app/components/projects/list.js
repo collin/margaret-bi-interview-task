@@ -7,6 +7,9 @@ export default function ListProjects({ projects }) {
     <>
       <Header />
       <h2>Projects</h2>
+      <Link className="button" to="/projects/new">
+        Add a Project
+      </Link>
       <ul className="project-list">
         {projects.map((project) => {
           return (
@@ -14,6 +17,11 @@ export default function ListProjects({ projects }) {
               <p>{project.title}</p>
               <span className="project-actions">
                 <Link to={`/projects/${project.id}/edit`}>edit</Link>
+                <button onClick={(event) => console.log("DELETE")}>
+                  <span role="img" aria-label="Delete">
+                    🚫
+                  </span>
+                </button>
               </span>
             </li>
           );
