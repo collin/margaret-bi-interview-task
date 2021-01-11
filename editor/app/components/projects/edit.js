@@ -27,7 +27,6 @@ export default function EditProject({ project }) {
         },
         body: JSON.stringify({ title, description }),
       });
-      console.log(isSuccess);
       switch (response.status) {
         case 200:
           setErrors({});

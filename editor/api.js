@@ -10,6 +10,22 @@ const {
   buildSiteValidationErrors,
 } = require("./model.js");
 
+// Utiliy Methods
+
+const saveProject = function() {
+  return trapAsyncErrors(async (req, res, next) => {
+    const { title, description } = req.body;
+    const project = { title, description, id: req.params.id };
+    const validationErrors = buildProjectValidationErrors(project);
+    if (validationErrors.valid === false) {
+      res.status(422).send(validationErrors.errors);
+    } else {
+      await writeProject(req.params.id, project);
+      res.sendStatus(200);
+    }
+  })
+}
+
 const api = new express.Router();
 
 // Express doesn't have build in async-error handling, so this utility
@@ -39,17 +55,16 @@ api.get(
  */
 api.put(
   "/projects/:id",
-  trapAsyncErrors(async (req, res, next) => {
-    const { title, description } = req.body;
-    const project = { title, description, id: req.params.id };
-    const validationErrors = buildProjectValidationErrors(project);
-    if (validationErrors.valid === false) {
-      res.status(422).send(validationErrors.errors);
-    } else {
-      await writeProject(req.params.id, project);
-      res.sendStatus(200);
-    }
-  })
+  saveProject()
+);
+
+/**
+ * POST a new project onto disk
+ * GOOBER GOOBER BANANA THIS DOESN'T WORK
+ */
+api.post(
+  "/projects/:id",
+  saveProject()
 );
 
 /**
