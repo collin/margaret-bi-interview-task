@@ -1,31 +1,63 @@
 import React, {useState} from "react";
 import Header from "../header";
 import Errors from "../errors";
+import Success from "../success";
+import Link from "../link";
 import { v4 as uuidv4 } from 'uuid';
 
 export default function NewProject () {
 
-  let project = {};
+  const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isSuccess, setSuccess] = useState(false);
+
+  let project = {};
 
   async function createProject(event) {
     event.preventDefault();
     project.id = uuidv4();
-    const response = await fetch(`/api/projects/${project.id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title: project.title, description: project.description })
-    });
+    try {
+      const response = await fetch(`/api/projects/${project.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title: project.title, description: project.description })
+      });
 
-    console.log(response);
+      console.log(response.status);
+      switch (response.status) {
+        case 200:
+          setErrors({});
+          showSuccess();
+          break;
+        case 422:
+          const errors = await response.json();
+          setErrors(errors);
+          break;
+        default:
+          throw new Error(`Unexpected HTTP response: ${response.status}`);
+      }
+    } catch (error) {
+      console.error(error);
+      navigateTo("/application-error");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  function showSuccess() {
+    setSuccess(true);
+    setTimeout(() => {
+      setSuccess(false);
+    }, 3000);
   }
 
   return (
     <>
     <Header/>
     <h1>Create a New Project</h1>
+    <Success success={isSuccess}/>
     <form onSubmit={createProject}>
     <label htmlFor="projectTitle">Project Title</label>
         <input
@@ -44,11 +76,14 @@ export default function NewProject () {
         />
         <Errors errors={errors.description} />
 
-        <button type="submit">Create Project</button>
-        {/* <button type="submit" disabled={cannotSubmit}>
-          Save
-        </button> */}
+        <button type="submit" disabled={saving}>
+          Create Project
+        </button>
     </form>
+
+    <nav>
+        <Link to="/projects">Back to list</Link>
+    </nav>
     </>
   )
 }
