@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Header from "../header";
 import Errors from "../errors";
+import Success from "../success";
 import Link from "../link";
 import { navigateTo } from "../../util/routing";
 
@@ -9,13 +10,16 @@ export default function EditProject({ project }) {
   const [description, setDescription] = useState(project.description);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isSuccess, setSuccess] = useState(false);
   const hasErrors = Object.keys(errors).length > 0;
   const cannotSubmit = saving;
 
   async function saveChanges(event) {
     event.preventDefault();
     setSaving(true);
+
     try {
+      console.log(project);
       const response = await fetch(`/api/projects/${project.id}`, {
         method: "PUT",
         headers: {
@@ -23,9 +27,11 @@ export default function EditProject({ project }) {
         },
         body: JSON.stringify({ title, description }),
       });
+      console.log(isSuccess);
       switch (response.status) {
         case 200:
           setErrors({});
+          showSuccess();
           break;
         case 422:
           const errors = await response.json();
@@ -42,10 +48,18 @@ export default function EditProject({ project }) {
     }
   }
 
+  function showSuccess() {
+    setSuccess(true);
+    setTimeout(() => {
+      setSuccess(false);
+    }, 3000);
+  }
+  
   return (
     <>
       <Header />
       <h2>Edit project "{project.title}"</h2>
+      <Success success={isSuccess}/>
       <form onSubmit={saveChanges}>
         <label htmlFor="projectTitle">Project Title</label>
         <input

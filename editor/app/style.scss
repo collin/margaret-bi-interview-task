@@ -45,6 +45,16 @@ form {
   padding: 0;
 }
 
+.success {
+  display: block;
+  width: 40%;
+  margin: 10px;
+  color: white;
+  padding: 10px;
+  background: green;
+  text-align: center;
+}
+
 .project-list-item {
   display: grid;
   grid-template-columns: 1fr 10rem;
