@@ -85,7 +85,7 @@ describe("Projects", () => {
       });
       assert.isFalse(errors.valid);
       assert.deepEqual(
-        ["The id MUST contain only lower-case letters and dashes."],
+        ["The id MUST contain only lower-case letters, numbers, and dashes."],
         errors.errors.id
       );
     });

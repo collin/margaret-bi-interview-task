@@ -1,23 +1,40 @@
 import React, { useState } from "react";
 import Header from "../header";
 import Errors from "../errors";
+import Success from "../success";
 import Link from "../link";
 import { navigateTo } from "../../util/routing";
+import { v4 as uuidv4 } from 'uuid';
 
-export default function EditProject({ project }) {
+export default function EditProject({ project, requestType }) {
+  let headingText;
+  if(!project) {
+    project = {
+      title: '',
+      description: '',
+      id: ''
+    };
+    headingText = "Create New Project"
+  } else {
+    headingText = `Edit project "${project.title}"`
+  }
+
   const [title, setTitle] = useState(project.title);
   const [description, setDescription] = useState(project.description);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
-  const hasErrors = Object.keys(errors).length > 0;
+  const [isSuccess, setSuccess] = useState(false);
   const cannotSubmit = saving;
 
   async function saveChanges(event) {
     event.preventDefault();
     setSaving(true);
+    if (!project.id) {
+      project.id = uuidv4();
+    }
     try {
       const response = await fetch(`/api/projects/${project.id}`, {
-        method: "PUT",
+        method: requestType,
         headers: {
           "Content-Type": "application/json",
         },
@@ -26,6 +43,7 @@ export default function EditProject({ project }) {
       switch (response.status) {
         case 200:
           setErrors({});
+          showSuccess();
           break;
         case 422:
           const errors = await response.json();
@@ -42,10 +60,18 @@ export default function EditProject({ project }) {
     }
   }
 
+  function showSuccess() {
+    setSuccess(true);
+    setTimeout(() => {
+      setSuccess(false);
+    }, 3000);
+  }
+  
   return (
     <>
       <Header />
-      <h2>Edit project "{project.title}"</h2>
+      <h2>{headingText}</h2>
+      <Success success={isSuccess} message={"Saved Successfully"}/>
       <form onSubmit={saveChanges}>
         <label htmlFor="projectTitle">Project Title</label>
         <input

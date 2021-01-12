@@ -43,12 +43,13 @@ exports.buildProjectValidationErrors = function buildProjectValidationErrors(
     errors.valid = false;
     errors.errors.id = ["An id MUST be provided."];
   }
-  if (data.id && !data.id.match(/^[a-z\-]+$/)) {
+  if (data.id && !data.id.match(/^[a-z0-9\-]+$/)) {
     errors.valid = false;
     errors.errors.id = [
-      "The id MUST contain only lower-case letters and dashes.",
+      "The id MUST contain only lower-case letters, numbers, and dashes.",
     ];
   }
+  console.log(errors);
   return errors;
 };
 
