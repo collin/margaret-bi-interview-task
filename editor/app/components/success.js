@@ -1,10 +1,10 @@
 import React from "react";
 
-export default function Success({ success }) {
+export default function Success({ success, message }) {
   if (!success) return null;
   return (
     <div className="success">
-      <p>Saved successfully</p>
+      <p>{message}</p>
     </div>
   );
 }

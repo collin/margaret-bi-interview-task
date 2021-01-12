@@ -9,7 +9,11 @@ import { v4 as uuidv4 } from 'uuid';
 export default function EditProject({ project, request }) {
   let headingText;
   if(!project) {
-    project = {};
+    project = {
+      title: '',
+      description: '',
+      id: ''
+    };
     headingText = "Create New Project"
   } else {
     headingText = `Edit project "${project.title}"`
@@ -68,7 +72,7 @@ export default function EditProject({ project, request }) {
     <>
       <Header />
       <h2>{headingText}</h2>
-      <Success success={isSuccess}/>
+      <Success success={isSuccess} message={"Saved Successfully"}/>
       <form onSubmit={saveChanges}>
         <label htmlFor="projectTitle">Project Title</label>
         <input
