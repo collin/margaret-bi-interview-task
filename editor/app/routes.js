@@ -3,7 +3,6 @@ import Home from "./components/home";
 import ApplicationError from "./components/application-error";
 import ListProjects from "./components/projects/list";
 import EditProject from "./components/projects/edit";
-import NewProject from "./components/projects/new";
 import EditSite from "./components/site/edit";
 
 function trapAsyncErrors(routeFunction) {
@@ -27,9 +26,9 @@ export default {
     const projects = await (await fetch("/api/projects")).json();
     return <ListProjects projects={projects} />;
   }),
-  "/projects/new": () => <NewProject/>,
+  "/projects/new": () => <EditProject project={null} request={"POST"}/>,
   "/projects/:id/edit": trapAsyncErrors(async ({ id }) => {
     const project = await (await fetch(`/api/projects/${id}`)).json();
-    return <EditProject project={project} />;
+    return <EditProject project={project} request={"PUT"}/>;
   }),
 };

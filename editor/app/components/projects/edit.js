@@ -4,8 +4,17 @@ import Errors from "../errors";
 import Success from "../success";
 import Link from "../link";
 import { navigateTo } from "../../util/routing";
+import { v4 as uuidv4 } from 'uuid';
 
-export default function EditProject({ project }) {
+export default function EditProject({ project, request }) {
+  let headingText;
+  if(!project) {
+    project = {};
+    headingText = "Create New Project"
+  } else {
+    headingText = `Edit project "${project.title}"`
+  }
+
   const [title, setTitle] = useState(project.title);
   const [description, setDescription] = useState(project.description);
   const [saving, setSaving] = useState(false);
@@ -17,11 +26,12 @@ export default function EditProject({ project }) {
   async function saveChanges(event) {
     event.preventDefault();
     setSaving(true);
-
+    if (!project.id) {
+      project.id = uuidv4();
+    }
     try {
-      console.log(project);
       const response = await fetch(`/api/projects/${project.id}`, {
-        method: "PUT",
+        method: request,
         headers: {
           "Content-Type": "application/json",
         },
@@ -57,7 +67,7 @@ export default function EditProject({ project }) {
   return (
     <>
       <Header />
-      <h2>Edit project "{project.title}"</h2>
+      <h2>{headingText}</h2>
       <Success success={isSuccess}/>
       <form onSubmit={saveChanges}>
         <label htmlFor="projectTitle">Project Title</label>
