@@ -24,7 +24,6 @@ export default function EditProject({ project, request }) {
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSuccess, setSuccess] = useState(false);
-  const hasErrors = Object.keys(errors).length > 0;
   const cannotSubmit = saving;
 
   async function saveChanges(event) {
