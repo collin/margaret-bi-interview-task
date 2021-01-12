@@ -6,7 +6,7 @@ import Link from "../link";
 import { navigateTo } from "../../util/routing";
 import { v4 as uuidv4 } from 'uuid';
 
-export default function EditProject({ project, request }) {
+export default function EditProject({ project, requestType }) {
   let headingText;
   if(!project) {
     project = {
@@ -34,7 +34,7 @@ export default function EditProject({ project, request }) {
     }
     try {
       const response = await fetch(`/api/projects/${project.id}`, {
-        method: request,
+        method: requestType,
         headers: {
           "Content-Type": "application/json",
         },

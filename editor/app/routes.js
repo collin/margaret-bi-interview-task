@@ -26,9 +26,9 @@ export default {
     const projects = await (await fetch("/api/projects")).json();
     return <ListProjects projects={projects} />;
   }),
-  "/projects/new": () => <EditProject project={null} request={"POST"}/>,
+  "/projects/new": () => <EditProject project={null} requestType={"POST"}/>,
   "/projects/:id/edit": trapAsyncErrors(async ({ id }) => {
     const project = await (await fetch(`/api/projects/${id}`)).json();
-    return <EditProject project={project} request={"PUT"}/>;
+    return <EditProject project={project} requestType={"PUT"}/>;
   }),
 };
